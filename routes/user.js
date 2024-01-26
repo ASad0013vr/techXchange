@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../Models/User");
 
 const { login, signup } = require("../Controller/Auth");
-const { auth, isAdmin, isSeller } = require("../middleware/auth");
+const { auth, isUser } = require("../middleware/auth");
 
 router.post("/signup", signup);
 router.post("/login", login);
@@ -18,7 +18,7 @@ router.get("/test", auth, (req, res) => {
 
 // Protected Route for Student
 
-router.get("/", auth, isSeller, (req, res) => {
+router.get("/", auth, isUser, (req, res) => {
   res.json({
     success: true,
     message: "Welcome to Protected Route for User",
@@ -30,7 +30,6 @@ router.get("/", auth, isSeller, (req, res) => {
 router.get("/getEmail", auth, async (req, res) => {
   try {
     const id = req.user.id;
-    console.log(id);
     const user = await User.findOne({ _id: id });
     res.status(200).json({
       success: true,

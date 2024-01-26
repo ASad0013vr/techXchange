@@ -66,3 +66,19 @@ exports.isSeller = (req, res, next) => {
     });
   }
 };
+exports.isUser = (req, res, next) => {
+  try {
+    if (req.user.role !== "Seller") {
+      return res.status(401).json({
+        success: false,
+        message: "This is a protect route for User,you can not access it",
+      });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "User Role is not Matching",
+    });
+  }
+};
